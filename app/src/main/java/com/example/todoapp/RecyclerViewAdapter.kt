@@ -20,31 +20,27 @@ class RecyclerViewAdapter(private val items: ArrayList<ToDo>) :
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.binding.apply {
+            ToDoTitleTextView.text = ""
+            ToDoBoxCheckBox.isChecked = false
             ToDoTitleTextView.text = items[position].title
             ToDoBoxCheckBox.isChecked = items[position].checked
-            ToDoBoxCheckBox.setOnCheckedChangeListener { _, isChecked ->
-                items[position].checked = !items[position].checked
-                if (isChecked) {
-                    ToDoTitleTextView.setTextColor(Color.parseColor("#BCE784"))
-                } else {
-                    ToDoTitleTextView.setTextColor(Color.parseColor("#30b077"))
-                }
+            if(ToDoBoxCheckBox.isChecked){
+                ToDoTitleTextView.setTextColor(Color.parseColor("#8FE0BC"))
+            }else{
+                ToDoTitleTextView.setTextColor(Color.parseColor("#30b077"))
             }
 
+            ToDoBoxCheckBox.setOnCheckedChangeListener { button, isChecked ->
+                items[position].checked = !items[position].checked
+                if(isChecked)
+                    ToDoTitleTextView.setTextColor(Color.parseColor("#8FE0BC"))
+                else ToDoTitleTextView.setTextColor(Color.parseColor("#30b077"))
+
+            }
         }
     }
 
 
     override fun getItemCount() = items.size
-
-//    fun deleteSelectedItems() {
-//        for(i in 0 until items.size){
-//            if(items[i].checked) items.removeAt(i)
-//        }
-//    }
-    fun deleteItems(){
-        items.removeAll{ item -> item.checked }
-        notifyDataSetChanged()
-    }
 
 }
