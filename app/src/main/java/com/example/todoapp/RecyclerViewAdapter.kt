@@ -2,6 +2,7 @@ package com.example.todoapp
 
 import android.app.Activity
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,23 +24,27 @@ class RecyclerViewAdapter(private val items: ArrayList<ToDo>) :
             ToDoBoxCheckBox.isChecked = items[position].checked
             ToDoBoxCheckBox.setOnCheckedChangeListener { _, isChecked ->
                 items[position].checked = !items[position].checked
-                if(isChecked){
+                if (isChecked) {
                     ToDoTitleTextView.setTextColor(Color.parseColor("#BCE784"))
-                }else{
+                } else {
                     ToDoTitleTextView.setTextColor(Color.parseColor("#30b077"))
                 }
             }
 
-            }
         }
+    }
 
 
     override fun getItemCount() = items.size
 
-    fun deleteSelectedItems(){
+//    fun deleteSelectedItems() {
 //        for(i in 0 until items.size){
 //            if(items[i].checked) items.removeAt(i)
 //        }
+//    }
+    fun deleteItems(){
+        items.removeAll{ item -> item.checked }
+        notifyDataSetChanged()
     }
 
 }

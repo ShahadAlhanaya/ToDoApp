@@ -4,10 +4,12 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         floatingActionButton.setOnClickListener {
             addEntryDialog()
         }
+
     }
 
 
@@ -44,9 +47,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_delete) {
-
+//        if (item.itemId == R.id.menu_delete) {
+//
+//        }
+//        return super.onOptionsItemSelected(item)
+        var itemsDeleted = 0
+        for(i in toDoList){
+            if(i.checked){itemsDeleted++}
         }
+
+        if(itemsDeleted > 0){
+            Toast.makeText(this, "$itemsDeleted items deleted", Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(this, "No items selected", Toast.LENGTH_LONG).show()
+        }
+        recyclerViewAdapter.deleteItems()
         return super.onOptionsItemSelected(item)
     }
 
@@ -57,7 +72,9 @@ class MainActivity : AppCompatActivity() {
         val dialogEditText = dialogView.findViewById<TextView>(R.id.dialog_editText)
 
         builder.setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
-            toDoList.add(ToDo(dialogEditText.text.toString(), false))
+
+                toDoList.add(ToDo(dialogEditText.text.toString(), false))
+                recyclerViewAdapter.notifyItemInserted(toDoList.size-1)
         })
             .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ ->
                 dialog.cancel()
